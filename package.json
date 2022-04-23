@@ -1,0 +1,31 @@
+{
+	"name": "scope-multitablecomparison",
+	"version": "0.0.1",
+	"private": false,
+	"description": "",
+	"keywords": [
+		"ServiceNow",
+		"Now Experience UI Component",
+		"scope-multitablecomparison"
+	],
+	"readme": "./README.md",
+	"engines": {
+		"node": ">=8.6.0",
+		"npm": ">=5.3.0"
+	},
+	"module": "src/index.js",
+	"dependencies": {
+		"@servicenow/cli-archetype": "20.0.0",
+		"@servicenow/cli-component-archetype": "20.0.0",
+		"@servicenow/library-translate": "quebec",
+		"@servicenow/sass-kit": "quebec",
+		"@servicenow/sass-theme": "quebec",
+		"@servicenow/ui-core": "quebec",
+		"@servicenow/ui-renderer-snabbdom": "quebec",
+		"jquery": "^3.6.0"
+	},
+	"devDependencies": {
+		"@servicenow/cli-archetype-dev": "20.0.0",
+		"@servicenow/cli-component-archetype-dev": "20.0.0"
+	}
+}
