@@ -124,15 +124,13 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 							event.path[2].childNodes[node].innerText ==
 							event.path[1].innerText
 						) {
-							// If node in row matches innerText of currently selected node, then change to highlighted
-							// TODO: Likley highlightng current node twice, resolve for performance
 							if (event.path[2].childNodes[node].className == "selected") {
-								event.path[2].childNodes[node].className = "notSelectedField"
+								event.path[2].childNodes[node].className = "notSelectedField";
+							} else {
+								event.path[2].childNodes[node].className = "selected";
 							}
-
-							if (event.path[2].childNodes[node].className != "notSelectedField") {
-							event.path[2].childNodes[node].className = "selected";
-							}
+						} else {
+							event.path[2].childNodes[node].className = "notSelectedField";
 						}
 					}
 				}
