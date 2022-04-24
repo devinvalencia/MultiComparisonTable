@@ -15,12 +15,16 @@ const view = (state, { updateState, dispatch }) => {
 	return (
 		<div>
 			<table>
+				{/* Always make first row */}
 				<tr>
+					{/* For Each record object.number in data resource array, make a header */}
 					<th style={{border: 'none'}}></th>
 					<th style={styles.tableLabel}>Record 1</th>
 					<th style={styles.tableLabel}>Record 2</th>
 					<th style={styles.tableLabel}>Record 3</th>
 				</tr>
+
+				{/* For Each field AND for each record obj in arr, find same field.value for each td (besides first) */}
 				<tr>
 					<td class="fieldLabel" style={styles.tableLabel}>
 						Field_1
