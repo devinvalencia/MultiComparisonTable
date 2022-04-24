@@ -29,7 +29,7 @@ const view = (state, { updateState, dispatch }) => {
 						<div>FieldValue1</div>
 					</td>
 					<td class="fieldValue">
-						<div>FieldValue2</div>
+						<div>FieldValue1</div>
 					</td>
 					<td class="fieldValue">
 						<div>FieldValue3</div>
@@ -44,7 +44,7 @@ const view = (state, { updateState, dispatch }) => {
 						<div>FieldValue2</div>
 					</td>
 					<td class="fieldValue">
-						<div>FieldValue3</div>
+						<div>FieldValue1</div>
 					</td>
 				</tr>
 				<tr>
@@ -116,6 +116,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 						) {
 							event.path[2].childNodes[node].attributes[0].value = "test2";
 						}
+					} else {
+						event.path[2].childNodes[node].attributes[0].value = "test";
 					}
 				}
 			},
