@@ -5,17 +5,24 @@ import styles from "./styles.scss";
 import "./index.css";
 
 const view = (state, { updateState, dispatch }) => {
+	const styles = {
+		tableLabel: {
+			backgroundColor: "#d3d3d3",
+			fontWeight: 'bold'
+		},
+	};
+
 	return (
 		<div>
 			<table>
 				<tr>
-					<th></th>
-					<th>Record 1</th>
-					<th>Record 2</th>
-					<th>Record 3</th>
+					<th style={{border: 'none'}}></th>
+					<th style={styles.tableLabel}>Record 1</th>
+					<th style={styles.tableLabel}>Record 2</th>
+					<th style={styles.tableLabel}>Record 3</th>
 				</tr>
 				<tr>
-					<td class="fieldLabel">
+					<td class="fieldLabel" style={styles.tableLabel}>
 						Field_1
 					</td>
 					<td class="fieldValue">
@@ -29,7 +36,7 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td class="fieldLabel">Field_2</td>
+					<td class="fieldLabel" style={styles.tableLabel}>Field_2</td>
 					<td class="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -41,7 +48,7 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td class="fieldLabel">Field_3</td>
+					<td class="fieldLabel" style={styles.tableLabel}>Field_3</td>
 					<td class="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -53,7 +60,7 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td class="fieldLabel">Field_4</td>
+					<td class="fieldLabel" style={styles.tableLabel}>Field_4</td>
 					<td class="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -90,7 +97,6 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 						payload: { event },
 					},
 				} = coeffects;
-				
 
 				if (event.path[1].attributes[0].value != "test") {
 					event.path[1].attributes[0].value = "test";
@@ -98,12 +104,18 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 					event.path[1].attributes[0].value = "test2";
 				}
 
-
+				console.log(event.path);
 
 				// ONLY WORKS IF NO TWO FIELD VALUES ARE EXACTLY THE SAME
 				for (var node in event.path[2].childNodes) {
-					if (event.path[2].childNodes[node].innerText != event.path[1].innerText) {
-						event.path[2].childNodes[node].attributes[0].value = "test2";
+					if (
+						event.path[2].childNodes[node].innerText != event.path[1].innerText
+					) {
+						if (
+							event.path[2].childNodes[node].attributes[0].value != "fieldLabel"
+						) {
+							event.path[2].childNodes[node].attributes[0].value = "test2";
+						}
 					}
 				}
 			},
