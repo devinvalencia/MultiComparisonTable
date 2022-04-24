@@ -26,6 +26,8 @@
 	},
 	"devDependencies": {
 		"@servicenow/cli-archetype-dev": "20.0.0",
-		"@servicenow/cli-component-archetype-dev": "20.0.0"
+		"@servicenow/cli-component-archetype-dev": "20.0.0",
+		"process": "0.11.10",
+		"react-error-overlay": "^6.0.9"
 	}
 }

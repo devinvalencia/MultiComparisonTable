@@ -26,10 +26,14 @@ td div:hover {
   cursor: pointer;
 }
 
-.test {
+.selected {
   background-color: greenyellow;
 }
 
-.test2 {
+.notSelectedField {
   background: white;
+}
+
+.notSelectedRecord {
+  background-color: #d3d3d3;
 }

@@ -1,5 +1,4 @@
 import { createCustomElement, actionTypes } from "@servicenow/ui-core";
-const { COMPONENT_DOM_TREE_READY } = actionTypes;
 import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
 import "./index.css";
@@ -8,7 +7,7 @@ const view = (state, { updateState, dispatch }) => {
 	const styles = {
 		tableLabel: {
 			backgroundColor: "#d3d3d3",
-			fontWeight: 'bold'
+			fontWeight: "bold",
 		},
 	};
 
@@ -18,10 +17,16 @@ const view = (state, { updateState, dispatch }) => {
 				{/* Always make first row */}
 				<tr>
 					{/* For Each record object.number in data resource array, make a header */}
-					<th style={{border: 'none'}}></th>
-					<th style={styles.tableLabel}>Record 1</th>
-					<th style={styles.tableLabel}>Record 2</th>
-					<th style={styles.tableLabel}>Record 3</th>
+					<th class="ignore" style={{ border: "none" }}></th>
+					<th class="recordLabel" style={styles.tableLabel}>
+						<div>Record 1</div>
+					</th>
+					<th class="recordLabel" style={styles.tableLabel}>
+						<div>Record 2</div>
+					</th>
+					<th class="recordLabel" style={styles.tableLabel}>
+						<div>Record 3</div>
+					</th>
 				</tr>
 
 				{/* For Each field AND for each record obj in arr, find same field.value for each td (besides first) */}
@@ -40,7 +45,9 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td class="fieldLabel" style={styles.tableLabel}>Field_2</td>
+					<td class="fieldLabel" style={styles.tableLabel}>
+						Field_2
+					</td>
 					<td class="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -52,7 +59,9 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td class="fieldLabel" style={styles.tableLabel}>Field_3</td>
+					<td class="fieldLabel" style={styles.tableLabel}>
+						Field_3
+					</td>
 					<td class="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -60,19 +69,21 @@ const view = (state, { updateState, dispatch }) => {
 						<div>FieldValue2</div>
 					</td>
 					<td class="fieldValue">
-						<div>FieldValue3</div>
+						<div>FieldValue2</div>
 					</td>
 				</tr>
 				<tr>
-					<td class="fieldLabel" style={styles.tableLabel}>Field_4</td>
+					<td class="fieldLabel" style={styles.tableLabel}>
+						Field_4
+					</td>
 					<td class="fieldValue">
 						<div>FieldValue1</div>
 					</td>
 					<td class="fieldValue">
-						<div>FieldValue2</div>
+						<div>FieldValue1</div>
 					</td>
 					<td class="fieldValue">
-						<div>FieldValue3</div>
+						<div>FieldValue1</div>
 					</td>
 				</tr>
 			</table>
@@ -102,26 +113,27 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 					},
 				} = coeffects;
 
-				if (event.path[1].attributes[0].value != "test") {
-					event.path[1].attributes[0].value = "test";
-				} else {
-					event.path[1].attributes[0].value = "test2";
-				}
-
 				console.log(event.path);
 
-				// ONLY WORKS IF NO TWO FIELD VALUES ARE EXACTLY THE SAME
+				// path[0] = div in cell, path[1] = cell, path[2] = row
+				// For each cell in table row
 				for (var node in event.path[2].childNodes) {
-					if (
-						event.path[2].childNodes[node].innerText != event.path[1].innerText
-					) {
+					if (node < event.path[2].childNodes.length) {
+						// If node in row matches text of currently selected cell
 						if (
-							event.path[2].childNodes[node].attributes[0].value != "fieldLabel"
+							event.path[2].childNodes[node].innerText ==
+							event.path[1].innerText
 						) {
-							event.path[2].childNodes[node].attributes[0].value = "test2";
+							// If node in row matches innerText of currently selected node, then change to highlighted
+							// TODO: Likley highlightng current node twice, resolve for performance
+							if (event.path[2].childNodes[node].className == "selected") {
+								event.path[2].childNodes[node].className = "notSelectedField"
+							}
+
+							if (event.path[2].childNodes[node].className != "notSelectedField") {
+							event.path[2].childNodes[node].className = "selected";
+							}
 						}
-					} else {
-						event.path[2].childNodes[node].attributes[0].value = "test";
 					}
 				}
 			},
