@@ -82,8 +82,13 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	view,
 	styles,
 	actionHandlers: {
-		TEST_CLICK_ACTION: (e, value) => {
-			console.log(value);
+		TEST_CLICK_ACTION: ({ action, properties }) => {
+			// How to access payload, desctructure property from payload
+			const { value } = action.payload;
+
+			// Update Properties
+			// properties.testValues.push(event.path[0].innerText);
+			console.log(value.childNodes);
 		},
 	},
 	eventHandlers: [
@@ -97,12 +102,12 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 					},
 				} = coeffects;
 
-				console.log(event.path);
+				// console.log(event.path);
 
-				// path[0] = div in cell, path[1] = cell, path[2] = row
-				// For each cell in table row
-
-				var n = 0;
+				//var n = 0;
+				dispatch("TEST_CLICK_ACTION",{
+					value: event.path
+				});
 
 				for (var node in event.path[2].childNodes) {
 					if (
@@ -143,6 +148,11 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 			},
 		},
 	],
+	properties: {
+		testValues: {
+			default: [],
+		},
+	},
 });
 
 /**
