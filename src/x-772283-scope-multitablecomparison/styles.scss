@@ -1,2 +1,50 @@
 @import '@servicenow/sass-kit/host';
-@import './index.css';
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid grey;
+    text-align: left;
+    padding: 4px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  td div {
+    display: block;
+    position: relative;
+    color: black;
+    border-radius: 6px;
+    padding: 5px;
+  }
+  
+  td div:hover {
+    background-color: gray;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .selected {
+    background-color: greenyellow;
+  }
+  
+  .notSelectedField {
+    background-color: white;
+  }
+  
+  .notSelectedRecord {
+    background-color: #d3d3d3;
+  }
+  
+  .recordLabel {
+    background-color: #d3d3d3;
+  }
+
+  .fieldLabel {
+    background-color: #d3d3d3;
+    font-weight: bold;
+  }
