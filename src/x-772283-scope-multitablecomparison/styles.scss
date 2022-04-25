@@ -13,6 +13,10 @@ table {
     text-align: center;
     vertical-align: middle;
   }
+
+  th {
+    cursor: pointer;
+  }
   
   td div {
     display: block;
@@ -47,4 +51,9 @@ table {
   .fieldLabel {
     background-color: #d3d3d3;
     font-weight: bold;
+  }
+
+  .ignore {
+    border: none;
+    cursor: default;
   }

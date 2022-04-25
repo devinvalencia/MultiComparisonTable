@@ -9,7 +9,7 @@ const view = (state, { updateState, dispatch }) => {
 				{/* Always make first row */}
 				<tr>
 					{/* For Each record object.number in data resource array, make a header */}
-					<th className="ignore" style={{ border: "none" }}></th>
+					<th className="ignore"></th>
 					<th className="recordLabel">
 						<div>Record 1</div>
 					</th>
@@ -107,7 +107,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 				for (var node in event.path[2].childNodes) {
 					if (
 						node < event.path[2].childNodes.length &&
-						event.path[0].className != "fieldLabel"
+						event.path[0].className != "fieldLabel" &&
+						event.path[2].childNodes[node].nodeName != "TR"
 					) {
 						// If node in row matches text of currently selected cell
 						if (
