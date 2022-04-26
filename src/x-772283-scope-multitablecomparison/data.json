@@ -1,0 +1,68 @@
+[
+  {
+    "_row_data": {
+      "displayValue": "INC0010024",
+      "uniqueValue": "a926fc8087360110f774eb173cbb35ca"
+    },
+    "number": {
+      "value": "INC0010024",
+      "displayValue": "INC0010024"
+    },
+    "assigned_to": {
+      "value": "6816f79cc0a8016401c5a33be04be441",
+      "displayValue": "System Administrator"
+    },
+    "category": {
+      "value": "inquiry",
+      "displayValue": "Inquiry / Help"
+    },
+    "subcategory": {
+      "value": null,
+      "displayValue": null
+    }
+  },
+  {
+    "_row_data": {
+      "displayValue": "INC0010028",
+      "uniqueValue": "bef5f5d087320110f774eb173cbb35ca"
+    },
+    "number": {
+      "value": "INC0010028",
+      "displayValue": "INC0010028"
+    },
+    "assigned_to": {
+      "value": "6816f79cc0a8016401c5a33be04be441",
+      "displayValue": "System Administrator"
+    },
+    "category": {
+      "value": "inquiry",
+      "displayValue": "Inquiry / Help"
+    },
+    "subcategory": {
+      "value": null,
+      "displayValue": null
+    }
+  },
+  {
+    "_row_data": {
+      "displayValue": "INC0010029",
+      "uniqueValue": "fd05ae3c87c30110f774eb173cbb35df"
+    },
+    "number": {
+      "value": "INC0010029",
+      "displayValue": "INC0010029"
+    },
+    "assigned_to": {
+      "value": "6816f79cc0a8016401c5a33be04be441",
+      "displayValue": "System Administrator"
+    },
+    "category": {
+      "value": "inquiry",
+      "displayValue": "Inquiry / Help"
+    },
+    "subcategory": {
+      "value": null,
+      "displayValue": null
+    }
+  }
+]

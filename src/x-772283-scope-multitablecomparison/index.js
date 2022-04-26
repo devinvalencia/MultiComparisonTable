@@ -3,9 +3,12 @@ import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
 
 // Use Data to render table
-// const data = require("./data.json");
+const data = require("./data.json");
+
 
 const view = (state, { updateState, dispatch }) => {
+	console.log(data[0]._row_data.displayValue);
+
 	return (
 		<div>
 			<table>
@@ -208,8 +211,11 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	],
 	properties: {
 		testValues: {
-			default: [],
+			default: []
 		},
+		records: {
+			default: data
+		}
 	},
 });
 
