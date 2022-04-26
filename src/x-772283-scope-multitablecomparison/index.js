@@ -3,9 +3,12 @@ import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
 
 // Use Data to render table
-// const data = require("./data.json");
+const data = require("./data.json");
+
 
 const view = (state, { updateState, dispatch }) => {
+	console.log(data[0]._row_data.displayValue);
+
 	return (
 		<div>
 			<table>
@@ -92,21 +95,44 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 			// Update Properties
 			// properties.testValues.push(event.path[0].innerText);
 
-			var obj = {};
+			if (eventData.path[2].childNodes[0].nodeName != "TR") {
+				var obj = {};
 
-			for (var node in eventData.path[2].childNodes) {
-				if (
-					node < eventData.path[2].childNodes.length &&
-					eventData.path[0].className != "fieldLabel" &&
-					eventData.path[2].childNodes[node].nodeName != "TR"
-				) {
-					// If node in row matches text of currently selected cell
+				for (var node in eventData.path[2].childNodes) {
 					if (
-						eventData.path[2].childNodes[node].innerText ==
-						eventData.path[1].innerText
+						node < eventData.path[2].childNodes.length &&
+						eventData.path[0].className != "fieldLabel" &&
+						eventData.path[2].childNodes[node].nodeName != "TR"
 					) {
-						// If node already selected, make unselected
-						if (eventData.path[2].childNodes[node].className == "selected") {
+						// If node in row matches text of currently selected cell
+						if (
+							eventData.path[2].childNodes[node].innerText ==
+							eventData.path[1].innerText
+						) {
+							// If node already selected, make unselected
+							if (eventData.path[2].childNodes[node].className == "selected") {
+								if (eventData.path[2].childNodes[node].nodeName != "TH") {
+									eventData.path[2].childNodes[node].className =
+										"notSelectedField";
+								} else if (
+									eventData.path[2].childNodes[node].className != "ignore"
+								) {
+									eventData.path[2].childNodes[node].className =
+										"notSelectedRecord";
+								}
+							} else {
+								// Select all nodes that match innner text of current node to selected
+								eventData.path[2].childNodes[node].className = "selected";
+
+								// Update object
+								// var fieldNameLabel = eventData.path[2].childNodes[0].innerText;
+								// obj[fieldNameLabel] = eventData.path[0].innerText;
+								// console.log(obj);
+								// console.log(fieldNameLabel);
+							}
+						} else if (
+							eventData.path[2].childNodes[node].className != "fieldLabel"
+						) {
 							if (eventData.path[2].childNodes[node].nodeName != "TH") {
 								eventData.path[2].childNodes[node].className =
 									"notSelectedField";
@@ -116,52 +142,49 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 								eventData.path[2].childNodes[node].className =
 									"notSelectedRecord";
 							}
-						} else {
-							// Select all nodes that match innner text of current node to selected
-							eventData.path[2].childNodes[node].className = "selected";
-
-							// Update object
-							// var fieldNameLabel = eventData.path[2].childNodes[0].innerText;
-							// obj[fieldNameLabel] = eventData.path[0].innerText;
-							// console.log(obj);
-							// console.log(fieldNameLabel);
 						}
-					} else if (
-						eventData.path[2].childNodes[node].className != "fieldLabel"
-					) {
-						if (eventData.path[2].childNodes[node].nodeName != "TH") {
-							eventData.path[2].childNodes[node].className = "notSelectedField";
-						} else if (
-							eventData.path[2].childNodes[node].className != "ignore"
+					}
+				}
+
+				// Look at each row
+				for (var outerNode in eventData.path[3].childNodes) {
+					// Look at each cell in row
+					for (var innerNode in eventData.path[3].childNodes[outerNode]
+						.childNodes) {
+						// IF classname on this cell is selected
+						// ADD property & value to obj
+						// console.log(eventData.path[3].childNodes[outerNode].childNodes[innerNode]);
+
+						if (
+							eventData.path[3].childNodes[outerNode].childNodes[innerNode]
+								.className == "selected"
 						) {
-							eventData.path[2].childNodes[node].className =
-								"notSelectedRecord";
+							// console.log(`${eventData.path[3].childNodes[outerNode].childNodes[0].innerText} : ${eventData.path[3].childNodes[outerNode].childNodes[innerNode].innerText}`);
+							if (
+								eventData.path[3].childNodes[outerNode].childNodes[0]
+									.innerText != ""
+							) {
+								obj[
+									eventData.path[3].childNodes[
+										outerNode
+									].childNodes[0].innerText
+								] =
+									eventData.path[3].childNodes[outerNode].childNodes[
+										innerNode
+									].innerText;
+								break;
+							} else {
+								obj.record =
+									eventData.path[3].childNodes[outerNode].childNodes[
+										innerNode
+									].innerText;
+							}
 						}
 					}
 				}
+				// Print out final object
+				dispatch("RUN_FINAL_TEST", { finalList: obj });
 			}
-
-			// console.log(eventData.path);
-
-			// Look at each row
-			for (var outerNode in eventData.path[3].childNodes) {
-				
-				// Look at each cell in row
-				for (var innerNode in eventData.path[3].childNodes[outerNode].childNodes) {
-
-					// IF classname on this cell is selected
-					// ADD property & value to obj
-					// console.log(eventData.path[3].childNodes[outerNode].childNodes[innerNode]);
-
-					if (eventData.path[3].childNodes[outerNode].childNodes[innerNode].className == 'selected') {
-						// console.log(`${eventData.path[3].childNodes[outerNode].childNodes[0].innerText} : ${eventData.path[3].childNodes[outerNode].childNodes[innerNode].innerText}`);
-						obj[eventData.path[3].childNodes[outerNode].childNodes[0].innerText] = eventData.path[3].childNodes[outerNode].childNodes[innerNode].innerText;
-						break;
-					}
-				}
-			}
-			// Print out final object
-			dispatch('RUN_FINAL_TEST',{finalList: obj});
 		},
 		// Payload from this action will be used to render new merged form
 		RUN_FINAL_TEST: ({ action }) => {
@@ -181,14 +204,17 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 				} = coeffects;
 
 				dispatch("TEST_CLICK_ACTION", {
-					eventData: event
+					eventData: event,
 				});
 			},
 		},
 	],
 	properties: {
 		testValues: {
-			default: [],
+			default: []
+		},
+		records: {
+			default: data
 		}
 	},
 });
