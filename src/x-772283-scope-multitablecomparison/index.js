@@ -179,12 +179,9 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 						}
 					}
 				}
+				// Print out final object
+				dispatch("RUN_FINAL_TEST", { finalList: obj });
 			}
-
-			// console.log(eventData.path);
-
-			// Print out final object
-			dispatch("RUN_FINAL_TEST", { finalList: obj });
 		},
 		// Payload from this action will be used to render new merged form
 		RUN_FINAL_TEST: ({ action }) => {
