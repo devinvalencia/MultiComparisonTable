@@ -2,6 +2,9 @@ import { createCustomElement, actionTypes } from "@servicenow/ui-core";
 import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
 
+// Use Data to render table
+// const data = require("./data.json");
+
 const view = (state, { updateState, dispatch }) => {
 	return (
 		<div>
@@ -23,7 +26,7 @@ const view = (state, { updateState, dispatch }) => {
 
 				{/* For Each field AND for each record obj in arr, find same field.value for each td (besides first) */}
 				<tr>
-					<td className="fieldLabel">Field_1</td>
+					<td className="fieldLabel">Field_Name_A</td>
 					<td className="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -35,7 +38,7 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td className="fieldLabel">Field_2</td>
+					<td className="fieldLabel">Field_Name_B</td>
 					<td className="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -47,7 +50,7 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td className="fieldLabel">Field_3</td>
+					<td className="fieldLabel">Field_Name_C</td>
 					<td className="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -59,7 +62,7 @@ const view = (state, { updateState, dispatch }) => {
 					</td>
 				</tr>
 				<tr>
-					<td className="fieldLabel">Field_4</td>
+					<td className="fieldLabel">Field_Name_D</td>
 					<td className="fieldValue">
 						<div>FieldValue1</div>
 					</td>
@@ -157,14 +160,10 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 					}
 				}
 			}
-
 			// Print out final object
-			// dispatch('RUN_FINAL_TEST',{finalList: obj});
-
-			
-				console.log(obj);
-			
+			dispatch('RUN_FINAL_TEST',{finalList: obj});
 		},
+		// Payload from this action will be used to render new merged form
 		RUN_FINAL_TEST: ({ action }) => {
 			const { finalList } = action.payload;
 			console.log(finalList);
@@ -182,7 +181,7 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 				} = coeffects;
 
 				dispatch("TEST_CLICK_ACTION", {
-					eventData: event,
+					eventData: event
 				});
 			},
 		},
@@ -190,7 +189,7 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	properties: {
 		testValues: {
 			default: [],
-		},
+		}
 	},
 });
 
