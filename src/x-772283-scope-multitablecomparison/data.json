@@ -14,7 +14,7 @@
     },
     "category": {
       "value": "inquiry",
-      "displayValue": "Inquiry / Help"
+      "displayValue": "Test1"
     },
     "subcategory": {
       "value": null,
@@ -36,7 +36,7 @@
     },
     "category": {
       "value": "inquiry",
-      "displayValue": "Inquiry / Help"
+      "displayValue": "Test2"
     },
     "subcategory": {
       "value": null,
@@ -58,7 +58,7 @@
     },
     "category": {
       "value": "inquiry",
-      "displayValue": "Inquiry / Help"
+      "displayValue": "Test3"
     },
     "subcategory": {
       "value": null,
