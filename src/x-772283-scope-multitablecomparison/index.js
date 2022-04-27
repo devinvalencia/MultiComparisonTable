@@ -10,17 +10,15 @@ const view = ({ properties }, { updateState, dispatch }) => {
 
 	const fieldRows = [];
 	for (var n = 2; n < Object.keys(properties.records[0]).length; n++) {
-		
 		var fieldLabel = Object.keys(properties.records[0])[n];
 
-		var rowObj = {};
-		rowObj.fieldName = fieldLabel;
+		var rowObj = {[fieldLabel] : {}};
 		var x = 0;
 
-		for (var record in properties.records) {		
-			var fieldValue;
-			window.fieldValue = `recordValue${x}`;
+		rowObj.fieldName = fieldLabel;
 
+		for (var record in properties.records) {
+			window.fieldValue = `recordValue${x}`;
 			rowObj[window.fieldValue] = properties.records[record][fieldLabel].displayValue
 			// console.log(window.fieldValue);
 			x++;
@@ -28,6 +26,7 @@ const view = ({ properties }, { updateState, dispatch }) => {
 
 		fieldRows.push(rowObj);
 	}
+
 
 	console.log(fieldRows);
 
@@ -37,16 +36,25 @@ const view = ({ properties }, { updateState, dispatch }) => {
 				<tr>
 					<th className="ignore"></th>
 					{properties.records.map((record) => (
-						<th key={record.number.value} className="recordLabel"><div>{record.number.value}</div></th>
+						<th key={record.number.value} className="recordLabel">
+							<div>{record.number.value}</div>
+						</th>
 					))}
 				</tr>
 
-					<tr>
-						<td className="fieldLabel">FieldLabel</td>
-						<td className="fieldValue"><div>FieldValue</div>
-						</td>
+				{fieldRows.map((row) => (
+					<tr key={row}>
+						<td className="fieldLabel">{row}</td>
+
+						{fieldRows.map((innerRow) => (
+							<td key={innerRow} className="fieldValue">
+								<div>{innerRow}</div>
+							</td>
+						))}
+
+						{/* FOR EACH fieldRow object, produce an array that collects heach row */}
 					</tr>
-				
+				))}
 			</table>
 		</div>
 	);
