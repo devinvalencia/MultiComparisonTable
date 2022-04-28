@@ -5,77 +5,55 @@ import styles from "./styles.scss";
 // Use Data to render table
 const data = require("./data.json");
 
+const view = ({ properties }, { updateState, dispatch }) => {
+	// console.log(data[0]._row_data.displayValue);
+	
+	const fieldRows = [];
 
-const view = (state, { updateState, dispatch }) => {
-	console.log(data[0]._row_data.displayValue);
+	// For each property in first record AFTER first two props, run loop
+	for (var n = 2; n < Object.keys(properties.records[0]).length; n++) {
+		var fieldLabel = Object.keys(properties.records[0])[n];
+
+		var rowObj = {};
+		var x = 0;
+
+		rowObj.name = fieldLabel;
+		const valuesArr = [];
+
+		for (var record in properties.records) {
+			window.fieldValue = `recordValue${x}`;
+			valuesArr.push(properties.records[record][fieldLabel].displayValue);
+			x++;
+		}
+
+		rowObj.recordValues = valuesArr;
+		fieldRows.push(rowObj);
+	}
+
+
+	console.log(fieldRows);
 
 	return (
 		<div>
 			<table>
-				{/* Always make first row */}
 				<tr>
-					{/* For Each record object.number in data resource array, make a header */}
 					<th className="ignore"></th>
-					<th className="recordLabel">
-						<div>Record 1</div>
-					</th>
-					<th className="recordLabel">
-						<div>Record 2</div>
-					</th>
-					<th className="recordLabel">
-						<div>Record 3</div>
-					</th>
+					{properties.records.map((record) => (
+						<th key={record.number.value} className="recordLabel">
+							<div>{record.number.value}</div>
+						</th>
+					))}
 				</tr>
 
-				{/* For Each field AND for each record obj in arr, find same field.value for each td (besides first) */}
-				<tr>
-					<td className="fieldLabel">Field_Name_A</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue3</div>
-					</td>
-				</tr>
-				<tr>
-					<td className="fieldLabel">Field_Name_B</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue2</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-				</tr>
-				<tr>
-					<td className="fieldLabel">Field_Name_C</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue2</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue2</div>
-					</td>
-				</tr>
-				<tr>
-					<td className="fieldLabel">Field_Name_D</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-					<td className="fieldValue">
-						<div>FieldValue1</div>
-					</td>
-				</tr>
+				{fieldRows.map(row => (
+					<tr key={row.name}>
+					<td className="fieldLabel">{row.name}</td>
+					{row.recordValues.map(recordValue => (
+						<td key={row.name} className="fieldValue"><div>{recordValue}
+						</div></td>
+					))}
+					</tr>
+				))}
 			</table>
 		</div>
 	);
@@ -91,6 +69,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 		TEST_CLICK_ACTION: ({ action, properties, dispatch }) => {
 			// How to access payload, desctructure property from payload
 			const { eventData } = action.payload;
+
+			// console.log(eventData);
 
 			// Update Properties
 			// properties.testValues.push(event.path[0].innerText);
@@ -123,12 +103,6 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 							} else {
 								// Select all nodes that match innner text of current node to selected
 								eventData.path[2].childNodes[node].className = "selected";
-
-								// Update object
-								// var fieldNameLabel = eventData.path[2].childNodes[0].innerText;
-								// obj[fieldNameLabel] = eventData.path[0].innerText;
-								// console.log(obj);
-								// console.log(fieldNameLabel);
 							}
 						} else if (
 							eventData.path[2].childNodes[node].className != "fieldLabel"
@@ -189,7 +163,7 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 		// Payload from this action will be used to render new merged form
 		RUN_FINAL_TEST: ({ action }) => {
 			const { finalList } = action.payload;
-			console.log(finalList);
+			// console.log(finalList);
 		},
 	},
 	eventHandlers: [
@@ -211,11 +185,11 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	],
 	properties: {
 		testValues: {
-			default: []
+			default: [],
 		},
 		records: {
-			default: data
-		}
+			default: data,
+		},
 	},
 });
 
