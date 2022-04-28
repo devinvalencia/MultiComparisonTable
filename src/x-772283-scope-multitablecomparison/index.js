@@ -7,23 +7,26 @@ const data = require("./data.json");
 
 const view = ({ properties }, { updateState, dispatch }) => {
 	// console.log(data[0]._row_data.displayValue);
-
+	
 	const fieldRows = [];
+
+	// For each property in first record AFTER first two props, run loop
 	for (var n = 2; n < Object.keys(properties.records[0]).length; n++) {
 		var fieldLabel = Object.keys(properties.records[0])[n];
 
-		var rowObj = {[fieldLabel] : {}};
+		var rowObj = {};
 		var x = 0;
 
-		rowObj.fieldName = fieldLabel;
+		rowObj.name = fieldLabel;
+		const valuesArr = [];
 
 		for (var record in properties.records) {
 			window.fieldValue = `recordValue${x}`;
-			rowObj[window.fieldValue] = properties.records[record][fieldLabel].displayValue
-			// console.log(window.fieldValue);
+			valuesArr.push(properties.records[record][fieldLabel].displayValue);
 			x++;
 		}
 
+		rowObj.recordValues = valuesArr;
 		fieldRows.push(rowObj);
 	}
 
@@ -42,17 +45,13 @@ const view = ({ properties }, { updateState, dispatch }) => {
 					))}
 				</tr>
 
-				{fieldRows.map((row) => (
-					<tr key={row}>
-						<td className="fieldLabel">{row}</td>
-
-						{fieldRows.map((innerRow) => (
-							<td key={innerRow} className="fieldValue">
-								<div>{innerRow}</div>
-							</td>
-						))}
-
-						{/* FOR EACH fieldRow object, produce an array that collects heach row */}
+				{fieldRows.map(row => (
+					<tr key={row.name}>
+					<td className="fieldLabel">{row.name}</td>
+					{row.recordValues.map(recordValue => (
+						<td key={row.name} className="fieldValue"><div>{recordValue}
+						</div></td>
+					))}
 					</tr>
 				))}
 			</table>
