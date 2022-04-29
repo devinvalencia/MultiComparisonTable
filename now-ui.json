@@ -4,11 +4,28 @@
 	        "innerComponents": [],
 			"uiBuilder": {
 				"associatedTypes": ["global.core", "global.landing-page"],
-				"label": "My Component",
+				"label": "Comparison Table",
 				"icon": "document-outline",
-				"description": "A description of my component",
+				"description": "Compare multiple records and select which record values to keep for a merge",
 				"category": "primitives"
-			}
+			},
+			"properties" : [
+				{
+					"name": "records",
+					"label": "Data",
+					"description": "Look Up Records Results Data Used for Component",
+					"readOnly": false,
+					"required": false,
+					"fieldType": "json",
+					"defaultValue": "[]"
+				}
+			],
+			"actions" : [
+				{
+					"name":"UPDATE_PAYLOAD_OBJECT",
+					"description":"Updates object that could be used in other areas of platform"
+				}
+			]
 	    }
 	},
 	"scopeName": "x_772283_scope_m_1"

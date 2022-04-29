@@ -2,12 +2,10 @@ import { createCustomElement, actionTypes } from "@servicenow/ui-core";
 import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
 
-// Use Data to render table
-const data = require("./data.json");
+// Uncomment below for test data, then use as default in properties for testing
+// const data = require("./data.json");
 
 const view = ({ properties }, { updateState, dispatch }) => {
-	// console.log(data[0]._row_data.displayValue);
-	
 	const fieldRows = [];
 
 	// For each property in first record AFTER first two props, run loop
@@ -22,16 +20,18 @@ const view = ({ properties }, { updateState, dispatch }) => {
 
 		for (var record in properties.records) {
 			window.fieldValue = `recordValue${x}`;
+
+			if (properties.records[record][fieldLabel].displayValue != "" && properties.records[record][fieldLabel].displayValue != null ) {
 			valuesArr.push(properties.records[record][fieldLabel].displayValue);
+			} else {
+				valuesArr.push('(empty)');
+			}
 			x++;
 		}
 
 		rowObj.recordValues = valuesArr;
 		fieldRows.push(rowObj);
 	}
-
-
-	console.log(fieldRows);
 
 	return (
 		<div>
@@ -66,15 +66,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	view,
 	styles,
 	actionHandlers: {
-		TEST_CLICK_ACTION: ({ action, properties, dispatch }) => {
-			// How to access payload, desctructure property from payload
+		TABLE_CELL_SELECTED: ({ action, properties, dispatch }) => {
 			const { eventData } = action.payload;
-
-			// console.log(eventData);
-
-			// Update Properties
-			// properties.testValues.push(event.path[0].innerText);
-
 			if (eventData.path[2].childNodes[0].nodeName != "TR") {
 				var obj = {};
 
@@ -125,15 +118,10 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 					// Look at each cell in row
 					for (var innerNode in eventData.path[3].childNodes[outerNode]
 						.childNodes) {
-						// IF classname on this cell is selected
-						// ADD property & value to obj
-						// console.log(eventData.path[3].childNodes[outerNode].childNodes[innerNode]);
-
 						if (
 							eventData.path[3].childNodes[outerNode].childNodes[innerNode]
 								.className == "selected"
 						) {
-							// console.log(`${eventData.path[3].childNodes[outerNode].childNodes[0].innerText} : ${eventData.path[3].childNodes[outerNode].childNodes[innerNode].innerText}`);
 							if (
 								eventData.path[3].childNodes[outerNode].childNodes[0]
 									.innerText != ""
@@ -156,14 +144,12 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 						}
 					}
 				}
-				// Print out final object
-				dispatch("RUN_FINAL_TEST", { finalList: obj });
+				dispatch("UPDATE_PAYLOAD_OBJECT", { mergeValues: obj });
 			}
 		},
 		// Payload from this action will be used to render new merged form
-		RUN_FINAL_TEST: ({ action }) => {
-			const { finalList } = action.payload;
-			// console.log(finalList);
+		UPDATE_PAYLOAD_OBJECT: ({ action }) => {
+			const { mergeValues } = action.payload;
 		},
 	},
 	eventHandlers: [
@@ -177,24 +163,13 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 					},
 				} = coeffects;
 
-				dispatch("TEST_CLICK_ACTION", {
+				dispatch("TABLE_CELL_SELECTED", {
 					eventData: event,
 				});
 			},
 		},
 	],
 	properties: {
-		testValues: {
-			default: [],
-		},
-		records: {
-			default: data,
-		},
+		records: {},
 	},
 });
-
-/**
- *
- * https://react.semantic-ui.com/usage/ - 2.1.2
- *
- */
