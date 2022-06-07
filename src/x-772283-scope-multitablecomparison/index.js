@@ -1,6 +1,7 @@
 import { createCustomElement, actionTypes } from "@servicenow/ui-core";
 import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
+const {COMPONENT_RENDERED} = actionTypes;
 
 // Uncomment below for test data, then use as default in properties for testing
 // const data = require("./data.json");
@@ -151,6 +152,11 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 		UPDATE_PAYLOAD_OBJECT: ({ action }) => {
 			const { mergeValues } = action.payload;
 		},
+		[COMPONENT_RENDERED]: {
+            effect({state, host}) {
+                console.log(state, host);
+            }
+		}
 	},
 	eventHandlers: [
 		{

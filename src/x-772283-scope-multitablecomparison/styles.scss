@@ -7,7 +7,7 @@ table {
   }
   
   td, th {
-    border: 1px solid grey;
+    border: 1px solid lightgray;
     text-align: left;
     padding: 4px;
     text-align: center;
@@ -24,6 +24,8 @@ table {
     color: black;
     border-radius: 6px;
     padding: 5px;
+    text-align: left;
+    padding-left: 20px;
   }
   
   td div:hover {
@@ -33,7 +35,8 @@ table {
   }
   
   .selected {
-    background-color: greenyellow;
+    background-color: rgb(126,220,186);
+    font-weight: bold;
   }
   
   .notSelectedField {
@@ -41,15 +44,21 @@ table {
   }
   
   .notSelectedRecord {
-    background-color: #d3d3d3;
+    border: none;
   }
   
   .recordLabel {
-    background-color: #d3d3d3;
+    border: none;
   }
 
   .fieldLabel {
-    background-color: #d3d3d3;
+    background-color: rgb(247,247,247);
+    text-align: left;
+    padding-left: 20px;
+  }
+
+  .highligted {
+    background-color: rgb(243,242,212);
     font-weight: bold;
   }
 
