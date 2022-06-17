@@ -5,7 +5,7 @@ import styles from "./styles.scss";
 const { COMPONENT_RENDERED } = actionTypes;
 
 // Uncomment below for test data, then use as default in properties for testing
-const data = require("./data.json");
+//const data = require("./data.json");
 
 const TABLE_CELL_SELECTED = "TABLE_CELL_SELECTED";
 const HEADER_CELL_SELECTED = "HEADER_CELL_SELECTED";
@@ -190,6 +190,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 		return state;
 	},
 	properties: {
-		records: { default: data },
+		// Uncomment to test
+		//records: { default: data },
+		records: {}
 	},
 });
