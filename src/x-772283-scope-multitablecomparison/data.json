@@ -18,7 +18,7 @@
     },
     "subcategory": {
       "value": null,
-      "displayValue": "sub1"
+      "displayValue": "sub2"
     }
   },
   {
@@ -36,7 +36,7 @@
     },
     "category": {
       "value": "inquiry",
-      "displayValue": "Test2"
+      "displayValue": "Test3"
     },
     "subcategory": {
       "value": null,

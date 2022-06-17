@@ -1,68 +1,70 @@
-@import '@servicenow/sass-kit/host';
+// @import '@servicenow/sass-kit/host';
 
 table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  td, th {
-    border: 1px solid lightgray;
-    text-align: left;
-    padding: 4px;
-    text-align: center;
-    vertical-align: middle;
-  }
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
 
-  th {
-    cursor: pointer;
-  }
-  
-  td div {
-    display: block;
-    position: relative;
-    color: black;
-    border-radius: 6px;
-    padding: 5px;
-    text-align: left;
-    padding-left: 20px;
-  }
-  
-  td div:hover {
-    background-color: gray;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .selected {
-    background-color: rgb(126,220,186);
-    font-weight: bold;
-  }
-  
-  .notSelectedField {
-    background-color: white;
-  }
-  
-  .notSelectedRecord {
-    border: none;
-  }
-  
-  .recordLabel {
-    border: none;
-  }
+td, th {
+  border: 1px solid lightgray;
+  text-align: left;
+  padding: 4px;
+  text-align: center;
+  vertical-align: middle;
+}
 
-  .fieldLabel {
-    background-color: rgb(247,247,247);
-    text-align: left;
-    padding-left: 20px;
-  }
+th {
+  cursor: pointer;
+}
 
-  .highligted {
-    background-color: rgb(243,242,212);
-    font-weight: bold;
-  }
+td div {
+  display: block;
+  position: relative;
+  color: black;
+  border-radius: 6px;
+  padding: 5px;
+  text-align: left;
+  padding-left: 20px;
+}
 
-  .ignore {
-    border: none;
-    cursor: default;
+tr.highlighted td div:hover {
+  background-color: gray;
+  color: #fff;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: rgb(126,220,186);
+  font-weight: bold;
+}
+
+.selection-made:not(.selected) {
+  background-color: white;
+}
+
+.recordLabel {
+  border: none;
+}
+
+.fieldLabel {    
+  background-color: rgb(247,247,247);
+  text-align: left;
+  padding-left: 20px;
+  text-transform: capitalize;
+}
+
+.highlighted {
+  background-color: rgb(243,242,212);
+  font-weight: bold;
+
+  td.fieldLabel {
+    background-color: rgb(243, 242, 212) !important;
+    font-weight: normal;
   }
+}
+
+.ignore {
+  border: none;
+  cursor: default;
+}
