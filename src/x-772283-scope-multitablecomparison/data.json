@@ -32,7 +32,7 @@
     },
     "assigned_to": {
       "value": "6816f79cc0a8016401c5a33be04be441",
-      "displayValue": "System Administrator2"
+      "displayValue": "System Administrator3"
     },
     "category": {
       "value": "inquiry",
@@ -57,7 +57,7 @@
       "displayValue": "System Administrator3"
     },
     "category": {
-      "value": "inquiry",
+      "value": "non-inquiry",
       "displayValue": "Test3"
     },
     "subcategory": {

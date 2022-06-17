@@ -1,21 +1,29 @@
 import { createCustomElement, actionTypes } from "@servicenow/ui-core";
 import snabbdom from "@servicenow/ui-renderer-snabbdom";
 import styles from "./styles.scss";
+
 const { COMPONENT_RENDERED } = actionTypes;
+
 // Uncomment below for test data, then use as default in properties for testing
 const data = require("./data.json");
-const TABLE_CELL_SELECTED = 'TABLE_CELL_SELECTED';
 
-const view = (state, { dispatch, updateState }) => {
+const TABLE_CELL_SELECTED = "TABLE_CELL_SELECTED";
+const HEADER_CELL_SELECTED = "HEADER_CELL_SELECTED";
+
+const view = (state, { dispatch }) => {
 	const { properties, records, selectedColumn } = state;
 
-	const updateSelection = (rowIndex, columnIndex, selected, rowName) => {
+	const updateHeaderSelection = (selectedColumn) => {
+		dispatch(HEADER_CELL_SELECTED, { records: state.records, selectedColumn });
+	};
+
+	const updateCellSelection = (rowIndex, columnIndex, selected, rowName) => {
 		dispatch(TABLE_CELL_SELECTED, {
 			records: state.records,
 			rowIndex,
 			columnIndex,
 			selected,
-			rowName
+			rowName,
 		});
 	};
 
@@ -28,10 +36,17 @@ const view = (state, { dispatch, updateState }) => {
 						<th
 							key={index}
 							className={
-								"recordLabel " + (selectedColumn === index ? "selected" : "")
+								"recordLabel " +
+								(selectedColumn === record._row_data.uniqueValue
+									? "selected"
+									: "")
 							}
 						>
-							<div on-click={() => updateState({ selectedColumn: index })}>
+							<div
+								on-click={() =>
+									updateHeaderSelection(record._row_data.uniqueValue)
+								}
+							>
 								{record.number.value}
 							</div>
 						</th>
@@ -52,7 +67,7 @@ const view = (state, { dispatch, updateState }) => {
 								on-click={
 									row.different
 										? () =>
-												updateSelection(
+												updateCellSelection(
 													rowIndex,
 													colIndex,
 													!recordValue.selected
@@ -77,108 +92,48 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	view,
 	styles,
 	actionHandlers: {
-		[TABLE_CELL_SELECTED]: ({ action, dispatch, updateState }) => {
-			const { records, rowIndex, columnIndex, selected, rowName } = action.payload;
-			const obj = {};
+		[HEADER_CELL_SELECTED]: ({ action, dispatch, updateState }) => {
+			const { records, selectedColumn } = action.payload;
+			updateState({ selectedColumn });
+			dispatch(TABLE_CELL_SELECTED, { isHeader: true, records });
+		},
+		[TABLE_CELL_SELECTED]: ({ action, dispatch, state, updateState }) => {
+			const { isHeader, records, rowIndex, columnIndex, selected } =
+				action.payload;
+			const obj = state.selectedColumn ? { record: state.selectedColumn } : {};
+
 			const updatedRecords = [...records];
 
-			const updatedRowValues = [...updatedRecords[rowIndex].recordValues];
+			if (!isHeader) {
+				const updatedRowValues = [...updatedRecords[rowIndex].recordValues];
+				updatedRecords[rowIndex].selectionMade = selected;
 
-			for (let i = 0; i < updatedRowValues.length; i++) {
-				if (
-					i === columnIndex ||
-					(updatedRowValues[columnIndex].displayValue ===
-						updatedRowValues[i].displayValue &&
-						selected)
-				) {
-					updatedRowValues[i].selected = selected;
-				} else {
-					updatedRowValues[i].selected = false;
+				for (let i = 0; i < updatedRowValues.length; i++) {
+					if (
+						i === columnIndex ||
+						(updatedRowValues[columnIndex].displayValue ===
+							updatedRowValues[i].displayValue &&
+							updatedRowValues[columnIndex].value ===
+								updatedRowValues[i].value &&
+							selected)
+					) {
+						updatedRowValues[i].selected = selected;
+					} else {
+						updatedRowValues[i].selected = false;
+					}
 				}
+
+				updatedRecords[rowIndex].recordValues = updatedRowValues;
 			}
 
-			updatedRecords[rowIndex].recordValues = updatedRowValues;
+			updatedRecords.forEach((record) => {
+				if (record.recordValues.some((r) => r.selected)) {
+					obj[record.name] = record.recordValues.find((r) => r.selected).value;
+				}
+			});
 
 			updateState({ records: updatedRecords });
-
-			// if (eventData.path[2].childNodes[0].nodeName != "TR") {
-			// 	var obj = {};
-
-			// 	for (var node in eventData.path[2].childNodes) {
-			// 		if (
-			// 			node < eventData.path[2].childNodes.length &&
-			// 			eventData.path[0].className != "fieldLabel" &&
-			// 			eventData.path[2].childNodes[node].nodeName != "TR"
-			// 		) {
-			// 			// If node in row matches text of currently selected cell
-			// 			if (
-			// 				eventData.path[2].childNodes[node].innerText ==
-			// 				eventData.path[1].innerText
-			// 			) {
-			// 				// If node already selected, make unselected
-			// 				if (eventData.path[2].childNodes[node].className == "selected") {
-			// 					if (eventData.path[2].childNodes[node].nodeName != "TH") {
-			// 						eventData.path[2].childNodes[node].className =
-			// 							"notSelectedField";
-			// 					} else if (
-			// 						eventData.path[2].childNodes[node].className != "ignore"
-			// 					) {
-			// 						eventData.path[2].childNodes[node].className =
-			// 							"notSelectedRecord";
-			// 					}
-			// 				} else {
-			// 					// Select all nodes that match innner text of current node to selected
-			// 					eventData.path[2].childNodes[node].className = "selected";
-			// 				}
-			// 			} else if (
-			// 				eventData.path[2].childNodes[node].className != "fieldLabel"
-			// 			) {
-			// 				if (eventData.path[2].childNodes[node].nodeName != "TH") {
-			// 					eventData.path[2].childNodes[node].className =
-			// 						"notSelectedField";
-			// 				} else if (
-			// 					eventData.path[2].childNodes[node].className != "ignore"
-			// 				) {
-			// 					eventData.path[2].childNodes[node].className =
-			// 						"notSelectedRecord";
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-
-			// 	// Look at each row
-			// 	for (var outerNode in eventData.path[3].childNodes) {
-			// 		// Look at each cell in row
-			// 		for (var innerNode in eventData.path[3].childNodes[outerNode]
-			// 			.childNodes) {
-			// 			if (
-			// 				eventData.path[3].childNodes[outerNode].childNodes[innerNode]
-			// 					.className == "selected"
-			// 			) {
-			// 				if (
-			// 					eventData.path[3].childNodes[outerNode].childNodes[0]
-			// 						.innerText != ""
-			// 				) {
-			// 					obj[
-			// 						eventData.path[3].childNodes[
-			// 							outerNode
-			// 						].childNodes[0].innerText
-			// 					] =
-			// 						eventData.path[3].childNodes[outerNode].childNodes[
-			// 							innerNode
-			// 						].innerText;
-			// 					break;
-			// 				} else {
-			// 					obj.record =
-			// 						eventData.path[3].childNodes[outerNode].childNodes[
-			// 							innerNode
-			// 						].innerText;
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// 	dispatch("UPDATE_PAYLOAD_OBJECT", { mergeValues: obj });
-			// }
+			dispatch("UPDATE_PAYLOAD_OBJECT", { mergeValues: obj });
 		},
 		// Payload from this action will be used to render new merged form
 		UPDATE_PAYLOAD_OBJECT: ({ action }) => {
@@ -192,7 +147,7 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	},
 	initialState: {
 		records: [],
-		selectedColumn: -1,
+		selectedColumn: null,
 	},
 	transformState(state) {
 		// Sets the initial state if data exists
@@ -230,16 +185,6 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 			}
 
 			return { ...state, records: fieldRows };
-		} else if (state.records.length) {
-			const updatedRecords = [...state.records];
-
-			updatedRecords.forEach((record) => {
-				record.selectionMade = record.recordValues.some(
-					(value) => value.selected
-				);
-			});
-
-			return { ...state, records: updatedRecords };
 		}
 
 		return state;
