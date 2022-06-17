@@ -4,7 +4,7 @@ import styles from "./styles.scss";
 const {COMPONENT_RENDERED} = actionTypes;
 
 // Uncomment below for test data, then use as default in properties for testing
-// const data = require("./data.json");
+const data = require("./data.json");
 
 const view = ({ properties }, { updateState, dispatch }) => {
 	const fieldRows = [];
@@ -20,7 +20,7 @@ const view = ({ properties }, { updateState, dispatch }) => {
 		const valuesArr = [];
 
 		for (var record in properties.records) {
-			window.fieldValue = `recordValue${x}`;
+			// window.fieldValue = `recordValue${x}`;
 
 			if (properties.records[record][fieldLabel].displayValue != "" && properties.records[record][fieldLabel].displayValue != null ) {
 			valuesArr.push(properties.records[record][fieldLabel].displayValue);
@@ -69,6 +69,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	actionHandlers: {
 		TABLE_CELL_SELECTED: ({ action, properties, dispatch }) => {
 			const { eventData } = action.payload;
+			console.log(eventData);
+
 			if (eventData.path[2].childNodes[0].nodeName != "TR") {
 				var obj = {};
 
@@ -176,6 +178,8 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 		},
 	],
 	properties: {
-		records: {},
+		records: {
+			default: data
+		},
 	},
 });
