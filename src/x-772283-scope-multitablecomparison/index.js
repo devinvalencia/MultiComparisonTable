@@ -144,7 +144,6 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 		// Payload from this action will be used to render new merged form
 		[UPDATE_PAYLOAD_OBJECT]: ({ action }) => {
 			const { mergeValues } = action.payload;
-			console.log(mergeValues);
 		},
 		[COMPONENT_RENDERED]: {
 			effect({ state, host }) {
