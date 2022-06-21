@@ -57,7 +57,7 @@ const view = (state, { dispatch }) => {
 
 				{records.map((row, rowIndex) => (
 					<tr key={rowIndex} className={row.different ? "highlighted" : ""}>
-						<td className="fieldLabel">{row.name.replace("_", " ")}</td>
+						<td className="fieldLabel">{row.name.replaceAll("_", " ")}</td>
 						{row.recordValues.map((recordValue, colIndex) => (
 							<td
 								key={colIndex}

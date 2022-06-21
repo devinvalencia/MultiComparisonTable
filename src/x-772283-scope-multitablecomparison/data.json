@@ -19,6 +19,10 @@
     "subcategory": {
       "value": null,
       "displayValue": "sub2"
+    },
+    "social_security_number": {
+      "value": "123-45-6789",
+      "displayValue": "123-45-6789"
     }
   },
   {
@@ -41,6 +45,10 @@
     "subcategory": {
       "value": null,
       "displayValue": "sub2"
+    },
+    "social_security_number": {
+      "value": "123-45-6789",
+      "displayValue": "123-45-6789"
     }
   },
   {
@@ -63,6 +71,10 @@
     "subcategory": {
       "value": null,
       "displayValue": "sub2"
+    },
+    "social_security_number": {
+      "value": "123-45-6789",
+      "displayValue": "123-45-6798"
     }
   }
 ]
