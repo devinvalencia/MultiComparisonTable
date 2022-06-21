@@ -34,6 +34,15 @@ tr.highlighted td div:hover {
   cursor: pointer;
 }
 
+.no-records {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -8px;
+}
+
 .selected {
   background-color: rgb(126,220,186);
   font-weight: bold;

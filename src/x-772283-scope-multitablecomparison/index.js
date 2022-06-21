@@ -5,16 +5,18 @@ import styles from "./styles.scss";
 const { COMPONENT_RENDERED } = actionTypes;
 
 // Uncomment below for test data, then use as default in properties for testing
-//const data = require("./data.json");
+// const data = require("./data.json");
 
 const TABLE_CELL_SELECTED = "TABLE_CELL_SELECTED";
 const HEADER_CELL_SELECTED = "HEADER_CELL_SELECTED";
+const CREATE_PAYLOAD_OBJECT = "CREATE_PAYLOAD_OBJECT";
+const UPDATE_PAYLOAD_OBJECT = "UPDATE_PAYLOAD_OBJECT";
 
 const view = (state, { dispatch }) => {
 	const { properties, records, selectedColumn } = state;
 
 	const updateHeaderSelection = (selectedColumn) => {
-		dispatch(HEADER_CELL_SELECTED, { records: state.records, selectedColumn });
+		dispatch(HEADER_CELL_SELECTED, { selectedColumn });
 	};
 
 	const updateCellSelection = (rowIndex, columnIndex, selected, rowName) => {
@@ -27,7 +29,7 @@ const view = (state, { dispatch }) => {
 		});
 	};
 
-	return (
+	return properties.records.length ? (
 		<div>
 			<table>
 				<tr>
@@ -82,7 +84,7 @@ const view = (state, { dispatch }) => {
 				))}
 			</table>
 		</div>
-	);
+	) : (<div className="no-records">No records to display</div>);
 };
 
 createCustomElement("x-772283-scope-multitablecomparison", {
@@ -93,51 +95,56 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	styles,
 	actionHandlers: {
 		[HEADER_CELL_SELECTED]: ({ action, dispatch, updateState }) => {
-			const { records, selectedColumn } = action.payload;
+			const { selectedColumn } = action.payload;
 			updateState({ selectedColumn });
-			dispatch(TABLE_CELL_SELECTED, { isHeader: true, records });
+			dispatch(CREATE_PAYLOAD_OBJECT);
 		},
-		[TABLE_CELL_SELECTED]: ({ action, dispatch, state, updateState }) => {
-			const { isHeader, records, rowIndex, columnIndex, selected } =
-				action.payload;
-			const obj = state.selectedColumn ? { record: state.selectedColumn } : {};
+		[TABLE_CELL_SELECTED]: ({ action, dispatch, updateState }) => {
+			const { records, rowIndex, columnIndex, selected } = action.payload;
 
 			const updatedRecords = [...records];
 
-			if (!isHeader) {
-				const updatedRowValues = [...updatedRecords[rowIndex].recordValues];
-				updatedRecords[rowIndex].selectionMade = selected;
+			const updatedRowValues = [...updatedRecords[rowIndex].recordValues];
+			updatedRecords[rowIndex].selectionMade = selected;
 
-				for (let i = 0; i < updatedRowValues.length; i++) {
-					if (
-						i === columnIndex ||
-						(updatedRowValues[columnIndex].displayValue ===
-							updatedRowValues[i].displayValue &&
-							updatedRowValues[columnIndex].value ===
-								updatedRowValues[i].value &&
-							selected)
-					) {
-						updatedRowValues[i].selected = selected;
-					} else {
-						updatedRowValues[i].selected = false;
-					}
+			for (let i = 0; i < updatedRowValues.length; i++) {
+				if (
+					i === columnIndex ||
+					(updatedRowValues[columnIndex].displayValue ===
+						updatedRowValues[i].displayValue &&
+						updatedRowValues[columnIndex].value === updatedRowValues[i].value &&
+						selected)
+				) {
+					updatedRowValues[i].selected = selected;
+				} else {
+					updatedRowValues[i].selected = false;
 				}
-
-				updatedRecords[rowIndex].recordValues = updatedRowValues;
 			}
 
-			updatedRecords.forEach((record) => {
+			updatedRecords[rowIndex].recordValues = updatedRowValues;
+
+			updateState({ records: updatedRecords });
+			dispatch(CREATE_PAYLOAD_OBJECT);
+		},
+		[CREATE_PAYLOAD_OBJECT]: ({ dispatch, state }) => {
+			const mergeValues = state.selectedColumn
+				? { record: state.selectedColumn }
+				: {};
+
+			state.records.forEach((record) => {
 				if (record.recordValues.some((r) => r.selected)) {
-					obj[record.name] = record.recordValues.find((r) => r.selected).value;
+					mergeValues[record.name] = record.recordValues.find(
+						(r) => r.selected
+					).value;
 				}
 			});
 
-			updateState({ records: updatedRecords });
-			dispatch("UPDATE_PAYLOAD_OBJECT", { mergeValues: obj });
+			dispatch(UPDATE_PAYLOAD_OBJECT, { mergeValues });
 		},
 		// Payload from this action will be used to render new merged form
-		UPDATE_PAYLOAD_OBJECT: ({ action }) => {
+		[UPDATE_PAYLOAD_OBJECT]: ({ action }) => {
 			const { mergeValues } = action.payload;
+			console.log(mergeValues);
 		},
 		[COMPONENT_RENDERED]: {
 			effect({ state, host }) {
@@ -191,7 +198,7 @@ createCustomElement("x-772283-scope-multitablecomparison", {
 	},
 	properties: {
 		// Uncomment to test
-		//records: { default: data },
-		records: {}
+		// records: { default: data },
+		records: { default: [] }
 	},
 });
